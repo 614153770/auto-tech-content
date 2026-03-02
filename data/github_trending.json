@@ -1,0 +1,11 @@
+[
+  {
+    "name": "等待首次抓取...",
+    "url": "https://github.com/trending",
+    "description": "首次数据将在北京时间每天 8:00 自动抓取",
+    "language": "Unknown",
+    "stars": 0,
+    "forks": 0,
+    "fetched_at": "2026-03-02T00:00:00"
+  }
+]

@@ -1,0 +1,53 @@
+name: Auto Update Content
+
+on:
+  schedule:
+    # 每天 UTC 0:00 运行（北京时间 8:00）
+    - cron: '0 0 * * *'
+  workflow_dispatch:  # 允许手动触发
+
+jobs:
+  update-content:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests beautifulsoup4
+      
+      - name: Fetch GitHub Trending
+        run: |
+          cd scripts
+          python fetch_github.py
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+      
+      - name: Generate Content
+        run: |
+          cd scripts
+          python generate_content.py
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+      
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "614153770@qq.com"
+          git config --local user.name "AI Content Bot"
+          git add -A
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "🤖 Auto-update content [skip ci] $(date '+%Y-%m-%d %H:%M')"
+            git push
+          fi
