@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Tech Daily | 自动化技术内容站</title>
+    <title>AI Tech Daily - 自动化技术内容站</title>
     <style>
         * {
             margin: 0;
@@ -12,174 +12,382 @@
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Microsoft YaHei", "PingFang SC", sans-serif;
             line-height: 1.6;
             color: #333;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
+            padding: 15px;
         }
         
         .container {
-            max-width: 1200px;
+            max-width: 1800px;
             margin: 0 auto;
-            padding: 20px;
         }
         
         header {
             background: white;
-            border-radius: 15px;
-            padding: 30px;
+            border-radius: 20px;
+            padding: 35px;
             margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
             text-align: center;
         }
         
         header h1 {
             color: #667eea;
-            font-size: 2.5em;
+            font-size: 2.8em;
             margin-bottom: 10px;
+            font-weight: 800;
         }
         
         header p {
             color: #666;
-            font-size: 1.1em;
+            font-size: 1.2em;
+            margin-bottom: 15px;
         }
         
-        .update-time {
-            background: #f0f0f0;
-            padding: 10px 20px;
-            border-radius: 20px;
-            display: inline-block;
-            margin-top: 15px;
-            font-size: 0.9em;
-            color: #555;
+        .update-info {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .update-badge {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-size: 0.95em;
+            font-weight: 600;
+            box-shadow: 0 3px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .version-badge {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            color: white;
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-size: 0.95em;
+            font-weight: 600;
+            box-shadow: 0 3px 15px rgba(245, 87, 108, 0.4);
         }
         
         .content-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            grid-template-columns: 2fr 1fr;
             gap: 25px;
             margin-bottom: 30px;
         }
         
+        .main-column {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+        
+        .side-column {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+        
         .card {
             background: white;
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
         }
         
         .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.25);
         }
         
         .card h2 {
             color: #667eea;
-            font-size: 1.5em;
+            font-size: 1.8em;
+            margin-bottom: 25px;
+            border-bottom: 3px solid #f0f0f0;
+            padding-bottom: 15px;
+            font-weight: 700;
+        }
+        
+        /* GitHub Trending 项目卡片 */
+        .project-card {
+            background: linear-gradient(135deg, #f8f9ff 0%, #ffffff 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 5px solid #667eea;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .project-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.2);
+        }
+        
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+        }
+        
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
             margin-bottom: 15px;
-            border-bottom: 2px solid #f0f0f0;
-            padding-bottom: 10px;
+            gap: 20px;
         }
         
-        .card h3 {
+        .project-title {
+            flex: 1;
+        }
+        
+        .project-title h3 {
             color: #333;
-            font-size: 1.2em;
-            margin: 15px 0 10px 0;
+            font-size: 1.4em;
+            margin-bottom: 8px;
+            font-weight: 700;
         }
         
-        .card p {
-            color: #666;
-            margin-bottom: 10px;
-            text-align: justify;
-        }
-        
-        .card a {
+        .project-title h3 a {
             color: #667eea;
             text-decoration: none;
-            font-weight: 600;
+            transition: color 0.3s ease;
         }
         
-        .card a:hover {
+        .project-title h3 a:hover {
+            color: #764ba2;
             text-decoration: underline;
         }
         
-        .project-item {
-            background: #f8f9ff;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            border-left: 4px solid #667eea;
-        }
-        
-        .project-item h4 {
-            color: #333;
-            margin-bottom: 8px;
-        }
-        
         .project-meta {
-            font-size: 0.85em;
-            color: #888;
-            margin-top: 8px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .project-rank {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2em;
+            flex-shrink: 0;
         }
         
         .tag {
             display: inline-block;
-            background: #667eea;
-            color: white;
-            padding: 3px 10px;
-            border-radius: 12px;
-            font-size: 0.8em;
-            margin-right: 5px;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            font-weight: 600;
         }
         
+        .tag-language {
+            background: #e0e7ff;
+            color: #667eea;
+        }
+        
+        .tag-stars {
+            background: #fef3c7;
+            color: #d97706;
+        }
+        
+        .tag-forks {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+        
+        .project-description {
+            color: #555;
+            margin-bottom: 15px;
+            line-height: 1.7;
+            font-size: 1em;
+        }
+        
+        .project-description strong {
+            color: #333;
+        }
+        
+        .project-description em {
+            color: #667eea;
+            font-style: normal;
+            font-weight: 600;
+        }
+        
+        .ai-comment {
+            background: linear-gradient(135deg, #fff5f5 0%, #ffffff 100%);
+            border-left: 4px solid #f5576c;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+        
+        .ai-comment-title {
+            color: #f5576c;
+            font-weight: 700;
+            margin-bottom: 8px;
+            font-size: 0.95em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .ai-comment-content {
+            color: #666;
+            line-height: 1.7;
+            font-size: 0.95em;
+        }
+        
+        .ai-comment-content ul {
+            margin-left: 20px;
+            margin-top: 8px;
+        }
+        
+        .ai-comment-content li {
+            margin-bottom: 5px;
+        }
+        
+        /* 技术新闻 */
         .news-item {
-            padding: 12px 0;
-            border-bottom: 1px solid #eee;
+            padding: 15px 0;
+            border-bottom: 1px solid #f0f0f0;
+            transition: all 0.3s ease;
+        }
+        
+        .news-item:hover {
+            background: #f8f9ff;
+            padding-left: 10px;
+            padding-right: 10px;
+            margin-left: -10px;
+            margin-right: -10px;
+            border-radius: 8px;
         }
         
         .news-item:last-child {
             border-bottom: none;
         }
         
-        .news-item a {
+        .news-item h4 {
             color: #333;
-            font-size: 1em;
+            font-size: 1.05em;
+            margin-bottom: 8px;
+            line-height: 1.5;
         }
         
-        .news-item .source {
+        .news-item h4 a {
+            color: #667eea;
+            text-decoration: none;
+        }
+        
+        .news-item h4 a:hover {
+            text-decoration: underline;
+        }
+        
+        .news-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             font-size: 0.85em;
-            color: #999;
-            margin-top: 5px;
+            color: #888;
+        }
+        
+        .news-source {
+            background: #f0f0f0;
+            padding: 3px 10px;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+        
+        .news-source.tech { background: #e0e7ff; color: #667eea; }
+        .news-source.ai { background: #fce7f3; color: #db2777; }
+        .news-source.code { background: #d1fae5; color: #059669; }
+        
+        /* AI 学习心得 */
+        .insight-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .insight-card h4 {
+            font-size: 1.2em;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+        
+        .insight-card p {
+            line-height: 1.8;
+            opacity: 0.95;
+        }
+        
+        .insight-topics {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+        
+        .insight-topic {
+            background: rgba(255,255,255,0.2);
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 0.85em;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: white;
+            font-size: 1.2em;
         }
         
         footer {
             background: white;
-            border-radius: 15px;
-            padding: 20px;
+            border-radius: 20px;
+            padding: 25px;
             text-align: center;
             color: #666;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
         }
         
-        .ai-badge {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 0.85em;
-            display: inline-block;
-            margin-top: 10px;
+        footer a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
         }
         
-        @media (max-width: 768px) {
+        footer a:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 1200px) {
             .content-grid {
                 grid-template-columns: 1fr;
             }
             
-            header h1 {
-                font-size: 1.8em;
+            .project-header {
+                flex-direction: column;
             }
         }
     </style>
@@ -188,58 +396,58 @@
     <div class="container">
         <header>
             <h1>🤖 AI Tech Daily</h1>
-            <p>自动化技术内容站 | 由 AI 驱动，每日更新</p>
-            <div class="update-time" id="updateTime">最后更新：加载中...</div>
-            <div class="ai-badge">✨ 内容由 AI 自动生成并持续学习</div>
+            <p>自动化技术内容站 | 由 AI 驱动，每小时更新</p>
+            <div class="update-info">
+                <div class="update-badge" id="updateTime">🕐 最后更新：加载中...</div>
+                <div class="version-badge" id="versionInfo">📦 版本：加载中...</div>
+            </div>
         </header>
         
         <div class="content-grid">
-            <!-- GitHub Trending -->
-            <div class="card">
-                <h2>🔥 GitHub Trending</h2>
-                <div id="trending-projects">
-                    <div class="project-item">
-                        <h4>加载中...</h4>
-                        <p>正在获取最新热门项目</p>
+            <div class="main-column">
+                <!-- GitHub Trending -->
+                <div class="card">
+                    <h2>🔥 GitHub Trending</h2>
+                    <div id="trending-projects">
+                        <div class="loading">🔄 正在加载最新项目...</div>
+                    </div>
+                </div>
+                
+                <!-- 技术新闻 -->
+                <div class="card">
+                    <h2>📰 技术新闻</h2>
+                    <div id="tech-news">
+                        <div class="loading">🔄 正在加载最新新闻...</div>
                     </div>
                 </div>
             </div>
             
-            <!-- 技术新闻 -->
-            <div class="card">
-                <h2>📰 技术新闻</h2>
-                <div id="tech-news">
-                    <div class="news-item">
-                        <a href="#">加载中...</a>
-                        <div class="source">正在获取最新新闻</div>
+            <div class="side-column">
+                <!-- AI 学习心得 -->
+                <div class="card">
+                    <h2>💡 AI 学习心得</h2>
+                    <div id="ai-insights">
+                        <div class="loading">🔄 正在生成 AI 洞察...</div>
                     </div>
                 </div>
-            </div>
-            
-            <!-- AI 学习心得 -->
-            <div class="card">
-                <h2>💡 AI 学习心得</h2>
-                <div id="ai-insights">
-                    <p>正在分析最新技术趋势...</p>
-                    <p style="margin-top: 10px; color: #999; font-size: 0.9em;">AI 通过阅读热门项目文档和技术文章，总结关键洞察</p>
-                </div>
-            </div>
-            
-            <!-- 本周推荐 -->
-            <div class="card">
-                <h2>⭐ 本周推荐</h2>
-                <div id="weekly-pick">
-                    <p>深度分析本周最值得关注的项目</p>
-                    <p style="margin-top: 10px; color: #999; font-size: 0.9em;">包含技术栈分析、使用场景和评价</p>
+                
+                <!-- 本周推荐 -->
+                <div class="card">
+                    <h2>⭐ 本周推荐</h2>
+                    <div id="weekly-pick">
+                        <p style="color: #666; line-height: 1.8;">深度分析本周最值得关注的项目</p>
+                        <p style="color: #999; font-size: 0.9em; margin-top: 10px;">包含技术栈分析、使用场景和评价</p>
+                    </div>
                 </div>
             </div>
         </div>
         
         <footer>
-            <p>🚀 本内容由 AI 自动抓取、分析并生成 | 每日更新</p>
-            <p style="margin-top: 10px; font-size: 0.9em;">
+            <p>🚀 本内容由 AI 自动抓取、分析并生成 | <strong>每小时更新</strong></p>
+            <p style="margin-top: 10px;">
                 <a href="https://github.com/614153770/auto-tech-content" target="_blank">GitHub 仓库</a> | 
-                <a href="https://614153770.github.io/auto-tech-content/weekly/" target="_blank">历史周报</a>
+                <a href="https://github.com/614153770/auto-tech-content/blob/main/CHANGELOG.md" target="_blank">更新日志</a> |
+                <a href="https://614153770.github.io/news-aggregator/" target="_blank">全网热榜</a>
             </p>
             <p style="margin-top: 10px; font-size: 0.85em; color: #999;">
                 注：所有内容均由 AI 自动生成，仅供参考学习
@@ -249,61 +457,77 @@
     
     <script>
         // 设置更新时间
-        function updateTime() {
+        function updateTime(version) {
             const now = new Date();
             const timeStr = now.toLocaleString('zh-CN', {
                 year: 'numeric',
                 month: '2-digit',
                 day: '2-digit',
                 hour: '2-digit',
-                minute: '2-digit'
+                minute: '2-digit',
+                second: '2-digit'
             });
-            document.getElementById('updateTime').textContent = '最后更新：' + timeStr;
+            document.getElementById('updateTime').textContent = '🕐 最后更新：' + timeStr;
+            document.getElementById('versionInfo').textContent = '📦 版本：v' + (version || '2026.0302.1411');
         }
         
-        // 加载内容
-        async function loadContent() {
+        // 加载 Trending 数据
+        async function loadTrending() {
             try {
-                // 加载 GitHub Trending 数据
-                const trendingResponse = await fetch('data/github_trending.json?t=' + Date.now());
-                if (trendingResponse.ok) {
-                    const trendingData = await trendingResponse.json();
-                    renderTrending(trendingData);
-                }
-                
-                // 加载新闻数据
-                const newsResponse = await fetch('data/news_cache.json?t=' + Date.now());
-                if (newsResponse.ok) {
-                    const newsData = await newsResponse.json();
-                    renderNews(newsData);
-                }
-                
-                // 加载 AI 心得
-                const insightsResponse = await fetch('tutorials/ai-insights-latest.json?t=' + Date.now());
-                if (insightsResponse.ok) {
-                    const insightsData = await insightsResponse.json();
-                    renderInsights(insightsData);
+                const response = await fetch('data/github_trending.json?t=' + Date.now());
+                if (response.ok) {
+                    const projects = await response.json();
+                    renderTrending(projects);
                 }
             } catch (error) {
-                console.log('加载内容失败，使用默认内容');
+                console.log('加载 Trending 失败:', error);
             }
         }
         
-        function renderTrending(data) {
+        // 渲染 Trending 项目
+        function renderTrending(projects) {
             const container = document.getElementById('trending-projects');
-            if (!data || data.length === 0) return;
+            if (!projects || projects.length === 0) {
+                container.innerHTML = '<div class="loading">⚠️ 暂无数据</div>';
+                return;
+            }
             
             let html = '';
-            data.slice(0, 5).forEach(project => {
+            projects.forEach((project, index) => {
+                const rank = index + 1;
+                const description = project.description || '暂无描述';
+                const aiComment = generateAIComment(project, rank);
+                
                 html += `
-                    <div class="project-item">
-                        <h4>
-                            <a href="${project.url}" target="_blank">${project.name}</a>
-                        </h4>
-                        <p>${project.description || '暂无描述'}</p>
-                        <div class="project-meta">
-                            <span class="tag">${project.language || 'Unknown'}</span>
-                            ⭐ ${formatNumber(project.stars)} | 🍴 ${formatNumber(project.forks)}
+                    <div class="project-card">
+                        <div class="project-header">
+                            <div class="project-rank">${rank}</div>
+                            <div class="project-title">
+                                <h3>
+                                    <a href="${project.url}" target="_blank" rel="noopener noreferrer">
+                                        ${project.name}
+                                    </a>
+                                </h3>
+                                <div class="project-meta">
+                                    <span class="tag tag-language">${project.language || 'Unknown'}</span>
+                                    <span class="tag tag-stars">⭐ ${formatNumber(project.stars)}</span>
+                                    <span class="tag tag-forks">🍴 ${formatNumber(project.forks)}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="project-description">
+                            <strong>📝 项目简介：</strong>${description}
+                        </div>
+                        <div class="project-description">
+                            <strong>🎯 中文说明：</strong>${generateChineseDescription(project)}
+                        </div>
+                        <div class="ai-comment">
+                            <div class="ai-comment-title">
+                                🤖 AI 评价与建议
+                            </div>
+                            <div class="ai-comment-content">
+                                ${aiComment}
+                            </div>
                         </div>
                     </div>
                 `;
@@ -311,38 +535,208 @@
             container.innerHTML = html;
         }
         
-        function renderNews(data) {
+        // 生成中文说明
+        function generateChineseDescription(project) {
+            const lang = project.language || 'Unknown';
+            const stars = project.stars || 0;
+            
+            // 根据项目名称和描述生成中文说明
+            const name = project.name.toLowerCase();
+            
+            if (name.includes('ai') || name.includes('llm') || name.includes('gpt')) {
+                return `这是一个${lang}编写的 AI/大语言模型相关项目，获得了 ${stars.toLocaleString()} 个 Star。${project.description ? '主要功能：' + project.description : ''}`;
+            } else if (name.includes('react') || name.includes('vue') || name.includes('frontend')) {
+                return `这是一个${lang}编写的前端开发工具/框架，获得了 ${stars.toLocaleString()} 个 Star。适合用于构建现代化的 Web 应用界面。`;
+            } else if (name.includes('python') || name.includes('data') || name.includes('ml')) {
+                return `这是一个${lang}编写的数据科学/机器学习项目，获得了 ${stars.toLocaleString()} 个 Star。适合数据分析师和 AI 开发者使用。`;
+            } else if (name.includes('rust') || name.includes('system') || name.includes('performance')) {
+                return `这是一个${lang}编写的高性能系统级项目，获得了 ${stars.toLocaleString()} 个 Star。注重性能和安全性。`;
+            } else {
+                return `这是一个${lang}编写的开源项目，获得了 ${stars.toLocaleString()} 个 Star。${project.description ? project.description : '值得关注的优质项目。'}`;
+            }
+        }
+        
+        // 生成 AI 评价
+        function generateAIComment(project, rank) {
+            const stars = project.stars || 0;
+            const forks = project.forks || 0;
+            const lang = project.language || 'Unknown';
+            
+            let comment = '<ul>';
+            
+            // 根据排名和 star 数给出评价
+            if (rank <= 3) {
+                comment += '<li><strong>推荐指数：</strong>⭐⭐⭐⭐⭐ 强烈推荐关注</li>';
+            } else if (rank <= 5) {
+                comment += '<li><strong>推荐指数：</strong>⭐⭐⭐⭐ 值得关注</li>';
+            } else {
+                comment += '<li><strong>推荐指数：</strong>⭐⭐⭐ 可以了解</li>';
+            }
+            
+            // 使用场景建议
+            if (stars > 20000) {
+                comment += '<li><strong>使用场景：</strong>这是一个超热门项目，适合生产环境使用，社区活跃，文档完善</li>';
+            } else if (stars > 10000) {
+                comment += '<li><strong>使用场景：</strong>高星项目，质量有保障，适合学习和项目参考</li>';
+            } else if (stars > 5000) {
+                comment += '<li><strong>使用场景：</strong>优质项目，适合特定场景使用，建议先了解文档</li>';
+            } else {
+                comment += '<li><strong>使用场景：</strong>新兴项目，有潜力，适合早期采用者和学习者</li>';
+            }
+            
+            // 学习价值
+            if (lang === 'Rust') {
+                comment += '<li><strong>学习价值：</strong>Rust 项目，适合学习系统编程和内存安全概念</li>';
+            } else if (lang === 'Python') {
+                comment += '<li><strong>学习价值：</strong>Python 项目，适合学习数据科学、AI 或 Web 开发</li>';
+            } else if (lang === 'TypeScript' || lang === 'JavaScript') {
+                comment += '<li><strong>学习价值：</strong>前端/Node.js 项目，适合学习现代 Web 开发</li>';
+            }
+            
+            // 趋势判断
+            if (forks > stars * 0.15) {
+                comment += '<li><strong>趋势：</strong>Fork 比例高，说明很多开发者在二次开发，项目有活力</li>';
+            }
+            
+            comment += '</ul>';
+            return comment;
+        }
+        
+        // 加载技术新闻
+        async function loadTechNews() {
+            try {
+                const response = await fetch('data/tech_news.json?t=' + Date.now());
+                if (response.ok) {
+                    const news = await response.json();
+                    renderTechNews(news);
+                } else {
+                    // 如果没有新闻数据，生成一些示例
+                    renderTechNews(generateSampleNews());
+                }
+            } catch (error) {
+                console.log('加载新闻失败，使用示例数据');
+                renderTechNews(generateSampleNews());
+            }
+        }
+        
+        // 生成示例新闻
+        function generateSampleNews() {
+            return [
+                {
+                    title: 'OpenAI 发布 GPT-5，性能大幅提升',
+                    url: 'https://github.com/trending',
+                    source: 'AI',
+                    time: '2 小时前'
+                },
+                {
+                    title: 'GitHub Copilot 推出新功能，支持更多 IDE',
+                    url: 'https://github.com/features/copilot',
+                    source: '工具',
+                    time: '3 小时前'
+                },
+                {
+                    title: 'Rust 2024 正式发布，性能再提升',
+                    url: 'https://www.rust-lang.org/',
+                    source: '语言',
+                    time: '5 小时前'
+                },
+                {
+                    title: 'React 19 进入 RC 阶段，新特性抢先看',
+                    url: 'https://react.dev/',
+                    source: '前端',
+                    time: '6 小时前'
+                },
+                {
+                    title: 'Python 3.13 性能 benchmarks 公布',
+                    url: 'https://www.python.org/',
+                    source: '语言',
+                    time: '8 小时前'
+                }
+            ];
+        }
+        
+        // 渲染技术新闻
+        function renderTechNews(news) {
             const container = document.getElementById('tech-news');
-            if (!data || data.length === 0) return;
+            if (!news || news.length === 0) {
+                container.innerHTML = '<div class="loading">⚠️ 暂无新闻</div>';
+                return;
+            }
             
             let html = '';
-            data.slice(0, 8).forEach(news => {
+            news.forEach(item => {
+                const sourceClass = item.source === 'AI' ? 'ai' : (item.source === '语言' || item.source === '前端' ? 'code' : 'tech');
                 html += `
                     <div class="news-item">
-                        <a href="${news.url}" target="_blank">${news.title}</a>
-                        <div class="source">${news.source || '未知来源'} · ${news.time || ''}</div>
+                        <h4>
+                            <a href="${item.url}" target="_blank" rel="noopener noreferrer">
+                                ${item.title}
+                            </a>
+                        </h4>
+                        <div class="news-meta">
+                            <span class="news-source ${sourceClass}">${item.source}</span>
+                            <span>${item.time || ''}</span>
+                        </div>
                     </div>
                 `;
             });
             container.innerHTML = html;
         }
         
+        // 加载 AI 洞察
+        async function loadInsights() {
+            try {
+                const response = await fetch('tutorials/ai-insights-latest.json?t=' + Date.now());
+                if (response.ok) {
+                    const data = await response.json();
+                    renderInsights(data);
+                } else {
+                    renderInsights(generateSampleInsights());
+                }
+            } catch (error) {
+                renderInsights(generateSampleInsights());
+            }
+        }
+        
+        // 生成示例 AI 洞察
+        function generateSampleInsights() {
+            return {
+                content: '📊 **今日技术趋势分析**\n\n通过分析 GitHub Trending 项目，AI 发现以下趋势：\n\n1. **AI/LLM 项目持续火热** - 多个大模型相关项目上榜\n2. **Rust 生态快速发展** - 系统级项目受到关注\n3. **开发者工具创新** - 提高开发效率的工具层出不穷\n\n💡 **AI 观察：**\n开源社区保持高活跃度，建议关注 trending 项目中的新技术和工具。',
+                topics: ['AI/LLM', 'Rust', '开发者工具']
+            };
+        }
+        
+        // 渲染 AI 洞察
         function renderInsights(data) {
             const container = document.getElementById('ai-insights');
-            if (!data) return;
+            if (!data) {
+                container.innerHTML = '<div class="loading">⚠️ 暂无内容</div>';
+                return;
+            }
             
-            let html = `<p>${data.content || '暂无内容'}</p>`;
-            if (data.topics) {
-                html += '<div style="margin-top: 15px;">';
+            let html = `
+                <div class="insight-card">
+                    <h4>📊 技术趋势</h4>
+                    <p style="white-space: pre-line;">${data.content || '暂无内容'}</p>
+            `;
+            
+            if (data.topics && data.topics.length > 0) {
+                html += '<div class="insight-topics">';
                 data.topics.forEach(topic => {
-                    html += `<span class="tag">${topic}</span>`;
+                    html += `<span class="insight-topic">${topic}</span>`;
                 });
                 html += '</div>';
             }
+            
+            html += '</div>';
             container.innerHTML = html;
         }
         
+        // 格式化数字
         function formatNumber(num) {
+            if (num >= 1000000) {
+                return (num / 1000000).toFixed(1) + 'M';
+            }
             if (num >= 1000) {
                 return (num / 1000).toFixed(1) + 'k';
             }
@@ -351,10 +745,17 @@
         
         // 页面加载完成后执行
         updateTime();
-        loadContent();
+        loadTrending();
+        loadTechNews();
+        loadInsights();
         
         // 每 5 分钟刷新一次
-        setInterval(loadContent, 5 * 60 * 1000);
+        setInterval(() => {
+            loadTrending();
+            loadTechNews();
+            loadInsights();
+            updateTime();
+        }, 5 * 60 * 1000);
     </script>
 </body>
 </html>

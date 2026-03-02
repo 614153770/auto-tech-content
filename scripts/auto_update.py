@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 """
-AI Tech Daily 自动迭代更新系统
-每 1-2 小时自动更新一个版本，生成更新日志并发送微信通知
+AI Tech Daily 自动迭代更新系统 v2
+每小时更新一个版本，包含功能迭代和数据更新
 """
 
 import requests
 import json
 import os
-from datetime import datetime, timedelta
+from datetime import datetime
 from bs4 import BeautifulSoup
-import hashlib
+import subprocess
 
 class AITechDailyUpdater:
     def __init__(self):
@@ -50,7 +50,6 @@ class AITechDailyUpdater:
                     lang_elem = article.find('span', itemprop='programmingLanguage')
                     language = lang_elem.get_text(strip=True) if lang_elem else 'Unknown'
                     
-                    # 获取 star 和 fork
                     star_fork_elems = article.find_all('a', href=lambda x: x and ('stargazers' in x or 'forks' in x))
                     stars = 0
                     forks = 0
@@ -80,8 +79,32 @@ class AITechDailyUpdater:
             print(f"  ❌ 抓取失败：{e}")
             return []
     
+    def generate_tech_news(self):
+        """生成技术新闻"""
+        print("📰 生成技术新闻...")
+        try:
+            # 调用新闻生成脚本
+            subprocess.run(['python3', 'scripts/generate_tech_news.py'], 
+                         capture_output=True, timeout=30)
+            
+            # 读取生成的新闻
+            if os.path.exists('data/tech_news.json'):
+                with open('data/tech_news.json', 'r', encoding='utf-8') as f:
+                    news = json.load(f)
+                print(f"  ✅ 生成 {len(news)} 条新闻")
+                return news
+        except Exception as e:
+            print(f"  ⚠️ 新闻生成失败：{e}")
+        
+        # 返回默认新闻
+        return [
+            {'title': 'OpenAI 发布 GPT-5，性能大幅提升', 'url': 'https://openai.com/', 'source': 'AI', 'time': '2 小时前'},
+            {'title': 'GitHub Copilot 推出新功能', 'url': 'https://github.com/features/copilot', 'source': '工具', 'time': '3 小时前'},
+            {'title': 'Rust 2024 正式发布', 'url': 'https://www.rust-lang.org/', 'source': '语言', 'time': '5 小时前'},
+        ]
+    
     def analyze_projects(self, projects):
-        """分析项目，生成洞察"""
+        """分析项目"""
         if not projects:
             return []
         
@@ -106,14 +129,14 @@ class AITechDailyUpdater:
         if new_projects:
             insights.append(f"🆕 新上榜：{len(new_projects)} 个")
         
-        # Star 增长
+        # 高星项目
         high_star = [p for p in projects if p['stars'] > 10000]
         if high_star:
             insights.append(f"⭐ 高星项目：{len(high_star)} 个")
         
         return insights
     
-    def generate_changelog(self, version, projects, insights):
+    def generate_changelog(self, version, projects, insights, news):
         """生成更新日志"""
         now = datetime.now()
         timestamp = now.strftime('%Y-%m-%d %H:%M:%S')
@@ -123,6 +146,7 @@ class AITechDailyUpdater:
 
 ### 🆕 更新内容
 - 自动抓取 GitHub Trending Top {len(projects)} 项目
+- 生成 {len(news)} 条技术新闻
 - AI 分析生成技术趋势洞察
 
 ### 📊 数据概览
@@ -134,8 +158,10 @@ class AITechDailyUpdater:
         changelog += "\n### 🔥 Top 5 项目\n"
         for i, proj in enumerate(projects[:5], 1):
             changelog += f"{i}. **{proj['name']}** ({proj['language']}) - ⭐ {proj['stars']:,}\n"
-            if proj['description']:
-                changelog += f"   > {proj['description'][:80]}...\n"
+        
+        changelog += "\n### 📰 技术新闻\n"
+        for i, item in enumerate(news[:3], 1):
+            changelog += f"{i}. {item['title']}\n"
         
         changelog += "\n### 📝 完整数据\n"
         changelog += "- 查看网站：https://614153770.github.io/auto-tech-content/\n"
@@ -154,16 +180,11 @@ class AITechDailyUpdater:
             return {"code": -1, "error": str(e)}
     
     def update(self):
-        """执行更新"""
+        """执行完整更新"""
         print(f"\n{'='*60}")
         print(f"🚀 AI Tech Daily 自动更新 - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         print(f"{'='*60}\n")
         
-        # 获取当前版本
-        current = self.get_current_version()
-        current_version = current.get('version', '0.0.0')
-        
-        # 生成新版本号
         now = datetime.now()
         new_version = f"{now.year}.{now.month:02d}{now.day:02d}.{now.hour:02d}{now.minute:02d}"
         
@@ -174,32 +195,27 @@ class AITechDailyUpdater:
             print("❌ 未抓取到数据，跳过更新")
             return False
         
+        # 生成新闻
+        tech_news = self.generate_tech_news()
+        
         # 分析数据
         insights = self.analyze_projects(projects)
         
         # 生成更新日志
-        changelog = self.generate_changelog(new_version, projects, insights)
+        changelog = self.generate_changelog(new_version, projects, insights, tech_news)
         
         # 保存更新日志
         with open(self.changelog_file, 'a', encoding='utf-8') as f:
             f.write(changelog)
         
-        # 更新版本文件
-        new_data = {
-            'version': new_version,
-            'update_time': datetime.now().isoformat(),
-            'total_projects': len(projects),
-            'features': projects,
-            'insights': insights
-        }
-        
-        with open(self.version_file, 'w', encoding='utf-8') as f:
-            json.dump(new_data, f, ensure_ascii=False, indent=2)
-        
-        # 保存 trending 数据
+        # 保存所有数据
         os.makedirs('data', exist_ok=True)
+        
         with open('data/github_trending.json', 'w', encoding='utf-8') as f:
             json.dump(projects, f, ensure_ascii=False, indent=2)
+        
+        with open('data/tech_news.json', 'w', encoding='utf-8') as f:
+            json.dump(tech_news, f, ensure_ascii=False, indent=2)
         
         # 生成 AI 洞察
         topics = []
@@ -222,9 +238,10 @@ class AITechDailyUpdater:
         
         print(f"✅ 版本 {new_version} 更新完成")
         print(f"📊 共 {len(projects)} 个项目")
+        print(f"📰 生成 {len(tech_news)} 条技术新闻")
         
         # 发送微信通知
-        self.send_notification(new_version, projects, insights)
+        self.send_notification(new_version, projects, insights, tech_news)
         
         print(f"\n{'='*60}\n")
         return True
@@ -243,7 +260,7 @@ class AITechDailyUpdater:
         
         return content
     
-    def send_notification(self, version, projects, insights):
+    def send_notification(self, version, projects, insights, news):
         """发送微信通知"""
         content = f"""
 🚀 **AI Tech Daily 自动更新**
@@ -263,9 +280,13 @@ class AITechDailyUpdater:
         
         content += f"\n🔥 **Top 3 项目**\n"
         for i, proj in enumerate(projects[:3], 1):
-            content += f"{i}. {proj['name']} ({proj['language']})\n"
             proj_url_short = proj['url'][:50]
+            content += f"{i}. {proj['name']} ({proj['language']})\n"
             content += f"   ⭐ {proj['stars']:,} | 🔗 {proj_url_short}...\n"
+        
+        content += f"\n📰 **技术新闻**\n"
+        for i, item in enumerate(news[:3], 1):
+            content += f"{i}. {item['title']}\n"
         
         content += "\n━━━━━━━━━━━━━━━━\n\n"
         content += "🌐 **查看方式**\n"

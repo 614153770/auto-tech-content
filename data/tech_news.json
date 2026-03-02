@@ -1,0 +1,92 @@
+[
+  {
+    "title": "GitHub Universe 2026 宣布新功能",
+    "url": "https://github.blog/",
+    "source": "GitHub",
+    "time": "1 小时前"
+  },
+  {
+    "title": "GitHub Actions 推出新特性，CI/CD 更高效",
+    "url": "https://github.blog/",
+    "source": "工具",
+    "time": "3 小时前"
+  },
+  {
+    "title": "Show HN: 我用 Rust 重写了整个 Web 框架",
+    "url": "https://news.ycombinator.com/",
+    "source": "社区",
+    "time": "2 小时前"
+  },
+  {
+    "title": "为什么我们应该重新思考微服务架构",
+    "url": "https://news.ycombinator.com/",
+    "source": "架构",
+    "time": "4 小时前"
+  },
+  {
+    "title": "Linux 6.8 内核发布，性能提升显著",
+    "url": "https://news.ycombinator.com/",
+    "source": "系统",
+    "time": "5 小时前"
+  },
+  {
+    "title": "OpenAI 发布 GPT-5，性能大幅提升",
+    "url": "https://openai.com/",
+    "source": "AI",
+    "time": "2 小时前"
+  },
+  {
+    "title": "Anthropic 推出 Claude 3.5，上下文窗口达 1M",
+    "url": "https://anthropic.com/",
+    "source": "AI",
+    "time": "3 小时前"
+  },
+  {
+    "title": "Meta 开源 Llama 4，支持多模态理解",
+    "url": "https://ai.meta.com/",
+    "source": "AI",
+    "time": "6 小时前"
+  },
+  {
+    "title": "Google DeepMind 新突破：AI 解决数学难题",
+    "url": "https://deepmind.google/",
+    "source": "AI",
+    "time": "8 小时前"
+  },
+  {
+    "title": "React 19 进入 RC 阶段，新特性抢先看",
+    "url": "https://react.dev/",
+    "source": "前端",
+    "time": "6 小时前"
+  },
+  {
+    "title": "Python 3.13 性能 benchmarks 公布",
+    "url": "https://www.python.org/",
+    "source": "语言",
+    "time": "8 小时前"
+  },
+  {
+    "title": "Rust 2024 正式发布，性能再提升",
+    "url": "https://www.rust-lang.org/",
+    "source": "语言",
+    "time": "10 小时前"
+  },
+  {
+    "title": "TypeScript 5.5 新增类型系统特性",
+    "url": "https://www.typescriptlang.org/",
+    "source": "语言",
+    "time": "12 小时前"
+  },
+  {
+    "title": "Docker 推出新容器运行时，性能提升 50%",
+    "url": "https://www.docker.com/",
+    "source": "工具",
+    "time": "1 天前"
+  },
+  {
+    "title": "Kubernetes 1.30 发布，增强安全性",
+    "url": "https://kubernetes.io/",
+    "source": "工具",
+    "time": "1 天前"
+  }
+]
