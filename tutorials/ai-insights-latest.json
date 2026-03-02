@@ -1,9 +1,7 @@
 {
-  "content": "📊 **今日技术趋势分析**\n\n今日 GitHub Trending 中，Python (6个项目)、TypeScript (2个项目)、Rust (1个项目)表现最为活跃。\n\n🔥 **热门项目：moeru-ai /airi**\nStar 数：20,445 | Fork 数：1,926\n简介：💖🧸 Self hosted, you-owned Grok Companion, a container of souls of waifu, cyber livings to bring them into our worlds, wishing to achieve Neuro-sama's altitude. Capable of realtime voice chat, Minecraft, Factorio playing. Web / macOS / Windows supported.\n\n💡 **AI 观察：**\n技术迭代速度持续加快，开源社区活跃度保持高位。\n建议关注以下方向：\n- Python 生态及相关工具链\n- TypeScript 生态及相关工具链\n- Rust 生态及相关工具链",
+  "content": "📊 **今日技术趋势分析**\n\n📊 热门语言：Python(8), TypeScript(3), Rust(1)\n\n💡 **AI 观察：**\n开源社区持续活跃，AI/ML 相关项目保持高热度。\n建议关注 trending 项目中的新技术和工具。\n",
   "topics": [
-    "Python",
-    "TypeScript",
-    "Rust"
+    ""
   ],
-  "generated_at": "2026-03-02T11:20:54.534478"
+  "generated_at": "2026-03-02T14:11:33.321421"
 }
