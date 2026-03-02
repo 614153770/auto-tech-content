@@ -240,8 +240,48 @@ class AITechDailyUpdater:
         print(f"📊 共 {len(projects)} 个项目")
         print(f"📰 生成 {len(tech_news)} 条技术新闻")
         
-        # 发送微信通知
-        self.send_notification(new_version, projects, insights, tech_news)
+        # 推送到 GitHub
+        print("🚀 正在推送到 GitHub...")
+        import subprocess
+        try:
+            result = subprocess.run(
+                ['git', 'add', '-A'],
+                capture_output=True, text=True, timeout=30
+            )
+            subprocess.run(
+                ['git', 'commit', '-m', f'🤖 Auto-update v{new_version}'],
+                capture_output=True, text=True, timeout=30
+            )
+            push_result = subprocess.run(
+                ['git', 'push'],
+                capture_output=True, text=True, timeout=120
+            )
+            
+            if push_result.returncode == 0:
+                print("✅ 推送成功")
+                
+                # 验证网站更新
+                print("\n🔍 验证网站更新...")
+                verify_result = subprocess.run(
+                    ['python3', 'scripts/verify_update.py'],
+                    capture_output=True, text=True, timeout=180
+                )
+                print(verify_result.stdout)
+                
+                if verify_result.returncode == 0:
+                    # 验证成功后才发送通知
+                    print("\n📱 发送微信通知...")
+                    self.send_notification(new_version, projects, insights, tech_news)
+                else:
+                    print("\n⚠️ 网站验证失败，暂不发送通知")
+                    self.send_error_notification(new_version, "网站验证失败，请手动检查")
+            else:
+                print(f"❌ 推送失败：{push_result.stderr}")
+                self.send_error_notification(new_version, f"Git 推送失败：{push_result.stderr[:200]}")
+                
+        except Exception as e:
+            print(f"❌ 推送或验证失败：{e}")
+            self.send_error_notification(new_version, f"更新异常：{str(e)}")
         
         print(f"\n{'='*60}\n")
         return True
@@ -261,7 +301,7 @@ class AITechDailyUpdater:
         return content
     
     def send_notification(self, version, projects, insights, news):
-        """发送微信通知"""
+        """发送成功通知"""
         content = f"""
 🚀 **AI Tech Daily 自动更新**
 
@@ -294,6 +334,8 @@ class AITechDailyUpdater:
         content += "- 仓库：https://github.com/614153770/auto-tech-content\n"
         content += "- 更新日志：CHANGELOG.md\n\n"
         content += "━━━━━━━━━━━━━━━━\n\n"
+        content += "✅ 已验证：网站更新成功\n\n"
+        content += "━━━━━━━━━━━━━━━━\n\n"
         content += "✅ 小明同学 | AI 助手\n"
         
         result = self.send_wechat(f"🚀 AI Tech Daily v{version}", content)
@@ -302,6 +344,46 @@ class AITechDailyUpdater:
             print(f"📱 微信通知发送成功")
         else:
             print(f"⚠️ 微信通知发送失败：{result}")
+    
+    def send_error_notification(self, version, error_msg):
+        """发送错误通知"""
+        content = f"""
+⚠️ **AI Tech Daily 更新异常**
+
+━━━━━━━━━━━━━━━━
+
+📦 **版本：** v{version}
+⏰ **时间：** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+
+━━━━━━━━━━━━━━━━
+
+❌ **错误信息：**
+{error_msg[:500]}
+
+━━━━━━━━━━━━━━━━
+
+🔧 **建议操作：**
+1. 检查 GitHub Actions 日志
+2. 访问网站确认状态
+3. 联系小明同学处理
+
+━━━━━━━━━━━━━━━━
+
+🌐 **相关链接**
+- GitHub Actions: https://github.com/614153770/auto-tech-content/actions
+- 网站：https://614153770.github.io/auto-tech-content/
+
+━━━━━━━━━━━━━━━━
+
+⚠️ 小明同学 | AI 助手
+"""
+        
+        result = self.send_wechat(f"⚠️ AI Tech Daily v{version} 更新异常", content)
+        
+        if result.get('code') == 0:
+            print(f"📱 错误通知发送成功")
+        else:
+            print(f"⚠️ 错误通知发送失败：{result}")
 
 def main():
     updater = AITechDailyUpdater()
