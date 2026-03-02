@@ -115,6 +115,49 @@
             font-weight: 700;
         }
         
+        /* 搜索框样式 */
+        .search-box {
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 15px 20px 15px 50px;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            background: white;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            font-size: 1.2em;
+        }
+        
+        .search-shortcut {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #f0f0f0;
+            padding: 3px 10px;
+            border-radius: 8px;
+            font-size: 0.85em;
+            color: #666;
+        }
+        
         /* GitHub Trending 项目卡片 */
         .project-card {
             background: linear-gradient(135deg, #f8f9ff 0%, #ffffff 100%);
@@ -408,6 +451,14 @@
                 <!-- GitHub Trending -->
                 <div class="card">
                     <h2>🔥 GitHub Trending</h2>
+                    
+                    <!-- 搜索框 -->
+                    <div class="search-box">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" class="search-input" id="projectSearch" placeholder="搜索项目、语言、描述..." autocomplete="off">
+                        <span class="search-shortcut">Ctrl+K</span>
+                    </div>
+                    
                     <div id="trending-projects">
                         <div class="loading">🔄 正在加载最新项目...</div>
                     </div>
@@ -456,6 +507,9 @@
     </div>
     
     <script>
+        let allProjects = []; // 存储所有项目
+        let currentFilter = ''; // 当前搜索关键词
+        
         // 设置更新时间
         function updateTime(version) {
             const now = new Date();
@@ -477,11 +531,52 @@
                 const response = await fetch('data/github_trending.json?t=' + Date.now());
                 if (response.ok) {
                     const projects = await response.json();
+                    allProjects = projects; // 保存所有项目
                     renderTrending(projects);
                 }
             } catch (error) {
                 console.log('加载 Trending 失败:', error);
             }
+        }
+        
+        // 搜索功能
+        function setupSearch() {
+            const searchInput = document.getElementById('projectSearch');
+            
+            // 实时搜索
+            searchInput.addEventListener('input', (e) => {
+                currentFilter = e.target.value.toLowerCase().trim();
+                filterProjects();
+            });
+            
+            // 快捷键 Ctrl+K
+            document.addEventListener('keydown', (e) => {
+                if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                    e.preventDefault();
+                    searchInput.focus();
+                    searchInput.select();
+                }
+            });
+        }
+        
+        // 过滤项目
+        function filterProjects() {
+            if (!currentFilter) {
+                renderTrending(allProjects);
+                return;
+            }
+            
+            const filtered = allProjects.filter(project => {
+                const name = project.name.toLowerCase();
+                const desc = (project.description || '').toLowerCase();
+                const lang = (project.language || '').toLowerCase();
+                
+                return name.includes(currentFilter) || 
+                       desc.includes(currentFilter) || 
+                       lang.includes(currentFilter);
+            });
+            
+            renderTrending(filtered);
         }
         
         // 渲染 Trending 项目
@@ -748,6 +843,7 @@
         loadTrending();
         loadTechNews();
         loadInsights();
+        setupSearch(); // 初始化搜索
         
         // 每 5 分钟刷新一次
         setInterval(() => {

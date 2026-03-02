@@ -1,9 +1,9 @@
-name: Hourly Auto Update
+name: Rapid Iteration Update
 
 on:
   schedule:
-    # 每小时执行一次
-    - cron: '0 * * * *'
+    # 每 10 分钟执行一次（快速迭代模式）
+    - cron: '*/10 * * * *'
   workflow_dispatch:  # 允许手动触发
 
 jobs:
