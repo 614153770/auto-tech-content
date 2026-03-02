@@ -12,6 +12,21 @@ from bs4 import BeautifulSoup
 import subprocess
 
 class AITechDailyUpdater:
+    def _parse_number(self, text):
+        """解析数字（支持 k, M 等单位）"""
+        if not text:
+            return 0
+        text = text.strip().replace(',', '')
+        if 'k' in text.lower():
+            return int(float(text.lower().replace('k', '')) * 1000)
+        elif 'm' in text.lower():
+            return int(float(text.lower().replace('m', '')) * 1000000)
+        else:
+            try:
+                return int(float(text))
+            except:
+                return 0
+
     def __init__(self):
         self.headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
@@ -55,14 +70,10 @@ class AITechDailyUpdater:
                     forks = 0
                     
                     if len(star_fork_elems) >= 2:
-                        stars_str = star_fork_elems[0].get_text(strip=True).replace(',', '')
-                        forks_str = star_fork_elems[1].get_text(strip=True).replace(',', '')
-                        
-                        try:
-                            stars = int(float(stars_str.lower().replace('k', '000').replace('m', '000000'))[:8])
-                            forks = int(float(forks_str.lower().replace('k', '000').replace('m', '000000'))[:8])
-                        except:
-                            pass
+                        stars_text = star_fork_elems[0].get_text(strip=True)
+                        forks_text = star_fork_elems[1].get_text(strip=True)
+                        stars = self._parse_number(stars_text)
+                        forks = self._parse_number(forks_text)
                     
                     projects.append({
                         'name': name,
