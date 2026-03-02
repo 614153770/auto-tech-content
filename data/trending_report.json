@@ -1,0 +1,19 @@
+{
+  "update_time": "2026-03-02T11:20:50.372348",
+  "total_projects": 10,
+  "top_project": {
+    "name": "moeru-ai /airi",
+    "url": "https://github.com/moeru-ai/airi",
+    "description": "💖🧸 Self hosted, you-owned Grok Companion, a container of souls of waifu, cyber livings to bring them into our worlds, wishing to achieve Neuro-sama's altitude. Capable of realtime voice chat, Minecraft, Factorio playing. Web / macOS / Windows supported.",
+    "language": "TypeScript",
+    "stars": 20445,
+    "forks": 1926,
+    "fetched_at": "2026-03-02T11:20:50.370187"
+  },
+  "languages": [
+    "Shell",
+    "Rust",
+    "Python",
+    "TypeScript"
+  ]
+}
